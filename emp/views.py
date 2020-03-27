@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import Http404
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView
+from django.http import Http404, HttpResponseRedirect
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import Employee
 from django.urls import reverse_lazy,reverse
-from .forms import EmployeeUpdateForm
+from .forms import EmployeeForm, EmployeeUpdateForm
 
 
 class EmployeeListView(ListView):
@@ -33,7 +33,24 @@ class EmployeeDeleteView(DeleteView):
 	template_name = 'emp/emp_confirm_delete.html'
 
 
-class EmployeeUpdateView(UpdateView):
+class FormActionMixin(object):
+
+    def post(self, request, *args, **kwargs):
+        """Add 'Cancel' button redirect."""
+        if "delete" in request.POST:
+        	url = reverse('emp:emp-delete',kwargs={'pk':kwargs['pk']})# or e.g. reverse(self.get_success_url())
+        	return HttpResponseRedirect(url)
+        elif "create" in request.POST:
+        	url = reverse('emp:emp-create')# or e.g. reverse(self.get_success_url())
+        	return HttpResponseRedirect(url)
+        elif "cancel" in request.POST:
+        	url = reverse('emp:emp-list')# or e.g. reverse(self.get_success_url())
+        	return HttpResponseRedirect(url)
+        else:
+        	return super(FormActionMixin, self).post(request, *args, **kwargs)
+
+
+class EmployeeUpdateView(FormActionMixin,UpdateView):
 	model = Employee
 	template_name = 'emp/emp_update_form.html'
 	# fields = ['first_name',
@@ -42,11 +59,22 @@ class EmployeeUpdateView(UpdateView):
 	# 		  'salary']
 
 	form_class = EmployeeUpdateForm
-	
 
 	def get_success_url(self,**kwargs):
-		print(self.object.id)
 		return reverse_lazy('emp:emp-detail-update',kwargs={'pk':self.object.id})
+
+
+
+
+
+class EmployeeCreateView(FormActionMixin,CreateView):
+	model = Employee
+	template_name = 'emp/emp_create.html'
+	form_class = EmployeeForm
+
+	def get_success_url(self,**kwargs):
+		return reverse_lazy('emp:emp-detail-update',kwargs={'pk':self.object.id})
+		
 
 
 
