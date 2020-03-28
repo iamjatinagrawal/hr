@@ -26,10 +26,3 @@ class Employee(models.Model):
 	def save(self,*args,**kwargs):
 		self.slug = slugify(self.first_name)
 		super(Employee, self).save(*args,**kwargs)
-
-
-#e = Employee.objects.create(first_name='Nihar',last_name='Agarwal',designation='React Developer', branch='Delhi', dob='1998-12-17', salary=2, email='nihar@nihar.com')
-#e = Employee.objects.create(first_name='Puru',last_name='Chandra',designation='Flutter Developer', branch='Pune', dob='1995-03-28', salary=3, email='puru@tradexa.co.in')
-#e = Employee.objects.create(first_name='Parmesh',last_name='Bhande',designation='Python Developer', branch='Pune', dob='1994-01-02', salary=4, email='parmesh@tradexa.co.in')
-#e = Employee.objects.create(first_name='Ramesh',last_name='Jhajharia',designation='CEO', branch='Pune', dob='1900-03-03', salary=0, email='ramesh@tradexa.co.in')
-#e = Employee.objects.create(first_name='Amrit',last_name='Khandelwal',designation='Sales Manager', branch='Pune', dob='1986-01-15', salary=100, email='amrit@imaginext.co.in')

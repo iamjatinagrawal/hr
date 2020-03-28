@@ -6,11 +6,24 @@ from django.urls import reverse_lazy,reverse
 from .forms import EmployeeForm, EmployeeUpdateForm
 
 
+'''
+Below is the ListView to show the list of all the employees present in the database.
+database table name is emp_employee (since the the model class is Employee)
+'''
+
 class EmployeeListView(ListView):
 	model = Employee
 	template_name = 'emp/index.html'
 	queryset = Employee.objects.all()
 	context_object_name = 'emp_list'
+
+
+
+'''
+Below is the DetailView to show all details of a single employee.
+DetailView is commented out because the UpdateView is used both for Details and Updating the record.
+It is also commented out for future referece.
+'''
 
 
 # class EmployeeDetailView(DetailView):
@@ -27,14 +40,18 @@ class EmployeeListView(ListView):
 # 			raise Http404("Employee with the given id doesn't exists")
 
 
+
+#EmployeeDeleteView is to delete an employee record from the database.
+
 class EmployeeDeleteView(DeleteView):
 	model = Employee
 	success_url = reverse_lazy('emp:emp-list')
 	template_name = 'emp/emp_confirm_delete.html'
 
 
-class FormActionMixin(object):
 
+
+class FormActionMixin(object):
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
         if "delete" in request.POST:
@@ -49,6 +66,10 @@ class FormActionMixin(object):
         else:
         	return super(FormActionMixin, self).post(request, *args, **kwargs)
 
+
+
+
+#The generic view below is used as the UpdateView and also used as the DetailView.
 
 class EmployeeUpdateView(FormActionMixin,UpdateView):
 	model = Employee
@@ -65,7 +86,7 @@ class EmployeeUpdateView(FormActionMixin,UpdateView):
 
 
 
-
+#EmployeeCreateView is used to create an employee record.
 
 class EmployeeCreateView(FormActionMixin,CreateView):
 	model = Employee
