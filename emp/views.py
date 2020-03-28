@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from django.views.generic import (ListView, 
+								  DetailView, 
+								  DeleteView,
+								  UpdateView,
+								  CreateView)
 from .models import Employee
 from django.urls import reverse_lazy,reverse
 from .forms import EmployeeForm, EmployeeUpdateForm
