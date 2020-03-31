@@ -28,6 +28,7 @@ class EmployeeUpdateForm(forms.ModelForm):
 
 
 
+
 class EmployeeForm(forms.ModelForm):
 	class Meta:
 		model = Employee
